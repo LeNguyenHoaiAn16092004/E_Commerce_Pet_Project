@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16
+    container_name: shopfun-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: shopfun
+      POSTGRES_PASSWORD: shopfun123
+      POSTGRES_DB: shopfun
+    ports:
+      - "5433:5432"
+    volumes:
+      - shopfun-pg:/var/lib/postgresql/data
+
+volumes:
+  shopfun-pg:
