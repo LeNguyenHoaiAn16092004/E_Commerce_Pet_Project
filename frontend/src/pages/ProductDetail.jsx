@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useShop } from '../store/ShopContext.jsx'
 import { useLocale } from '../i18n/LocaleContext.jsx'
 import ProductCard from '../components/ProductCard.jsx'
@@ -8,7 +8,8 @@ import SEO from '../components/SEO.jsx'
 
 export default function ProductDetail() {
   const { id } = useParams()
-  const { products, productsLoading, addToCart, toggleWishlist, wishlist, setCartOpen } = useShop()
+  const nav = useNavigate()
+  const { user, products, productsLoading, addToCart, toggleWishlist, wishlist, setCartOpen } = useShop()
   const { t, formatPrice } = useLocale()
   const p = products.find((x) => x.id === id)
   const [qty, setQtyLocal] = useState(1)
@@ -55,7 +56,7 @@ export default function ProductDetail() {
               <span className="font-bold w-6 text-center">{qty}</span>
               <button onClick={() => setQtyLocal(qty + 1)} className="w-8 h-8 rounded-full bg-orange-100 font-bold">+</button>
             </div>
-            <button onClick={() => { addToCart(p.id, qty); setCartOpen(true) }} className="flex-1 bg-pop-pink text-white font-bold rounded-full py-3.5 border-2 border-pop-dark shadow-pop hover:bg-pop-orange active:scale-95 transition">{t('card.add')}</button>
+            <button onClick={() => { if (!user) { nav('/login', { state: { from: `/product/${p.id}` } }); return } addToCart(p.id, qty); setCartOpen(true) }} className="flex-1 bg-pop-pink text-white font-bold rounded-full py-3.5 border-2 border-pop-dark shadow-pop hover:bg-pop-orange active:scale-95 transition">{t('card.add')}</button>
             <button onClick={() => toggleWishlist(p.id)} className={`w-13 h-13 p-3.5 rounded-full border-2 border-pop-dark font-bold text-xl ${wished ? 'bg-pop-pink text-white' : 'bg-white'}`}>{wished ? '♥' : '♡'}</button>
           </div>
           <div className="grid grid-cols-3 gap-2 mt-6 text-center text-sm font-bold">

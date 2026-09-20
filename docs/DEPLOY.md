@@ -40,9 +40,21 @@ npm run db:migrate   # tao bang + seed admin/customer/voucher/san pham
 https://render.com/deploy?repo=<URL-GitHub-cua-ban>
 ```
 
-Render tự tạo **API + Postgres + JWT secret ngẫu nhiên**, và tự chạy migrate
-(`preDeployCommand`) mỗi lần deploy. Sau đó chỉ cần điền `FRONTEND_URL`
+Render tự tạo **API + Postgres + JWT secret ngẫu nhiên**. Sau đó chỉ cần điền `FRONTEND_URL`
 = domain Vercel (Render → service → Environment).
+
+> Free tier **không** chạy `preDeployCommand` và **không** có Shell, nên migrate
+> bằng tay từ máy bạn (1 lần duy nhất): vào dashboard → database `shopfun-db` →
+> copy **External Database URL** → chạy local:
+>
+> ```powershell
+> cd backend
+> $env:DATABASE_URL="<External-Database-URL>"
+> npm run db:migrate   # phai thay [migrate] OK
+> Remove-Item Env:\DATABASE_URL
+> ```
+>
+> Code `db.js` đã tự bật SSL khi nối DB remote nên lệnh trên chạy được ngay.
 
 **Cách thủ công** (nếu không dùng blueprint):
 1. https://render.com → **New → Web Service** → chọn repo

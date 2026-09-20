@@ -132,7 +132,7 @@ export function ShopProvider({ children }) {
   }
   const logout = async () => {
     try { await api.logout() } catch { /* backend offline */ }
-    saveToken(); setUser(null); setApiOrders([]); setVoucher(null); say('Logged out')
+    saveToken(); setUser(null); setApiOrders([]); setVoucher(null); clearCart(); say('Logged out')
   }
 
   const refreshMe = async () => {

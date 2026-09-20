@@ -1,11 +1,17 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useShop } from '../store/ShopContext.jsx'
 import { useLocale } from '../i18n/LocaleContext.jsx'
 
 export default function ProductCard({ p }) {
-  const { addToCart, wishlist, toggleWishlist } = useShop()
+  const { user, addToCart, wishlist, toggleWishlist } = useShop()
   const { t, formatPrice } = useLocale()
+  const nav = useNavigate()
+  const loc = useLocation()
   const wished = wishlist.includes(p.id)
+  const handleAdd = () => {
+    if (!user) { nav('/login', { state: { from: loc.pathname } }); return }
+    addToCart(p.id)
+  }
   return (
     <div className="group bg-white rounded-3xl border-2 border-pop-dark shadow-pop overflow-hidden hover:-translate-y-1.5 transition-transform">
       <div className="relative">
@@ -23,7 +29,7 @@ export default function ProductCard({ p }) {
           <span className="font-display font-bold text-xl">{formatPrice(p.price)}</span>
           {p.oldPrice && <span className="line-through text-gray-400 font-bold text-sm">{formatPrice(p.oldPrice)}</span>}
         </div>
-        <button onClick={() => addToCart(p.id)} className="mt-3 w-full bg-pop-dark text-white font-bold rounded-full py-2.5 border-2 border-pop-dark hover:bg-pop-pink active:scale-95 transition">{t('card.add')}</button>
+        <button onClick={handleAdd} className="mt-3 w-full bg-pop-dark text-white font-bold rounded-full py-2.5 border-2 border-pop-dark hover:bg-pop-pink active:scale-95 transition">{t('card.add')}</button>
       </div>
     </div>
   )
