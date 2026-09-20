@@ -9,8 +9,8 @@ services:
     runtime: node
     rootDir: backend
     buildCommand: npm ci
-    # Tu chay migrate (tao bang + seed) truoc moi lan deploy
-    preDeployCommand: npm run db:migrate
+    # Free tier khong ho tro preDeployCommand -> sau khi deploy xong,
+    # chay migrate 1 lan bang Render Shell (xem docs/DEPLOY.md buoc 2b)
     startCommand: npm start
     plan: free
     healthCheckPath: /api/health
