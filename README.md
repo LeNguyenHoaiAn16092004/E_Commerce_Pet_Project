@@ -142,6 +142,7 @@ test-project-5/
 
 Bảng database: `users`, `products`, `orders`, `order_items`, `vouchers`,
 `reviews`. Chi tiết endpoint xem **[docs/API.md](docs/API.md)**.
+Deploy lên Vercel/VPS miễn phí xem **[docs/DEPLOY.md](docs/DEPLOY.md)**.
 
 ## Quy tắc nghiệp vụ (server là chuẩn)
 

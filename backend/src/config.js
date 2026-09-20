@@ -24,11 +24,16 @@ export const BCRYPT_ROUNDS = 13
 
 export const isProd = process.env.NODE_ENV === 'production'
 
-// Cookie session: httpOnly, SameSite=Lax, Secure khi production
+// Cookie session: httpOnly. Mac dinh SameSite=Lax (cung site: localhost, VPS 1 domain).
+// Khi frontend/backend KHAC domain (VD: Vercel + Render) phai dat
+// COOKIE_SAMESITE=none — trinh duyet chi chap nhan kem Secure (https).
+const sameSiteEnv = (process.env.COOKIE_SAMESITE || 'lax').toLowerCase()
+export const cookieSameSite = sameSiteEnv === 'none' ? 'none' : 'lax'
+export const cookieSecure = isProd || cookieSameSite === 'none'
 export const cookieOptions = {
   httpOnly: true,
-  sameSite: 'lax',
-  secure: isProd,
+  sameSite: cookieSameSite,
+  secure: cookieSecure,
   path: '/',
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 ngay
 }

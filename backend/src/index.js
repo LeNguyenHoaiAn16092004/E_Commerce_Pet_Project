@@ -6,7 +6,7 @@ import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 import { doubleCsrf } from 'csrf-csrf'
 import { pool } from './db.js'
-import { JWT_SECRET, allowedOrigins, isProd } from './config.js'
+import { JWT_SECRET, allowedOrigins, cookieSameSite, cookieSecure } from './config.js'
 import authRoutes from './routes/auth.js'
 import productRoutes from './routes/products.js'
 import orderRoutes from './routes/orders.js'
@@ -38,7 +38,7 @@ app.use((req, res, next) => {
   let sid = req.cookies?.sid
   if (!sid) {
     sid = crypto.randomBytes(16).toString('hex')
-    res.cookie('sid', sid, { httpOnly: true, sameSite: 'lax', secure: isProd, path: '/', maxAge: 365 * 24 * 60 * 60 * 1000 })
+    res.cookie('sid', sid, { httpOnly: true, sameSite: cookieSameSite, secure: cookieSecure, path: '/', maxAge: 365 * 24 * 60 * 60 * 1000 })
     req.cookies = { ...req.cookies, sid }
   }
   next()
@@ -52,7 +52,7 @@ const {
   // Gan CSRF token voi sid on dinh (khong dung JWT vi JWT doi sau khi login)
   getSessionIdentifier: (req) => req.cookies?.sid || req.ip || 'anonymous',
   cookieName: 'csrf_token',
-  cookieOptions: { httpOnly: true, sameSite: 'lax', secure: isProd, path: '/' },
+  cookieOptions: { httpOnly: true, sameSite: cookieSameSite, secure: cookieSecure, path: '/' },
   size: 64,
   ignoredMethods: ['GET', 'HEAD', 'OPTIONS'],
   getTokenFromRequest: (req) => req.headers['x-csrf-token'],
